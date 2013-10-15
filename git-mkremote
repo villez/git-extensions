@@ -1,0 +1,45 @@
+#!/bin/sh
+#
+# create a remote Git repository based on the current local repository
+# (current working directory). Uses ssh to connect to the remote machine.
+
+GIT_SERVER_ADDRESS="192.168.0.6"    # hostname or IP addresss
+GIT_SERVER_DIR="/var/share/git/"    # the directory path for the remote repos
+SSH_PARAMS=""                       # can add e.g. -l  for setting the login name
+GIT_REMOTE_DIR=$GIT_SERVER_ADDRESS:$GIT_SERVER_DIR
+
+
+# test that basic command-line usage is correct; 0 or 1 parameters accepted
+if [ "$#" -gt 1 ]; then
+    echo "usage: git mkremote [remote_repo_name]"
+    exit
+fi
+
+# test that we are at the top level of a git repo
+if [ ! -d ".git" ]; then
+    echo "not in a git repository, or not in its top level directory "
+    exit
+fi
+
+# test that the local repo is not dirty, i.e. has no uncommitted changes;
+# want to create the remote repo from a clean state
+if [ -n "$(git status --porcelain)" ]; then
+    echo "git repo not clean; commit changes first"
+    exit
+fi
+
+# set the name for the remote bare repo; by default, the same as current
+# directory with .git appended, but if a command-line parameter is given,
+# use that instead
+if [ "$#" -eq 1 ]; then
+    BARENAME=$1.git
+else
+    BARENAME=$(basename `pwd`).git
+fi
+
+# do the actual work; initialize a bare repository in the server via
+# ssh, add it as an origin to the local repo, and do the first push
+
+ssh $SSH_PARAMS $GIT_SERVER_ADDRESS "git init --bare $GIT_SERVER_DIR/$BARENAME"
+git remote add origin $GIT_REMOTE_DIR$BARENAME
+git push -u origin master
