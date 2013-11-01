@@ -8,11 +8,12 @@ can be run as
 
     git new-command
 	
-The install script here just copies the scripts to ~/bin, i.e. under
-the user's home directory, but that's easy to change. Just need to
-make sure the directory is included in $PATH.
+The install.sh script here just copies the scripts to ~/bin, i.e. under
+the user's home directory, but that's easy to change. You do need to
+make sure the directory is included in $PATH. 
 
-# git-mkremote
+
+## git-mkremote
 
 This script is meant to be run in an existing local git repository. It
 creates a corresponding remote repository on a remote host (accessible
@@ -21,14 +22,16 @@ pushes the current repo contents. Basic usage:
 
     git mkremote remote-name
 	
-This will create a bare remote repo remote-name.git in the remote
+This will create a bare remote repository remote-name.git in the remote
 machine. 
 
 Currently, the configuration of the remote host address and directory
-path, as well as any needed ssh options, are within the shell script;
-a TODO is to make them configurable via command-line.
+path, as well as any needed ssh options, are within the shell script itself.
+It'd be a more generally useful solution to make them configurable via
+the command line or a separate configuration file.
 
-# Copyright & License
+
+## Copyright & License
 
 (c) Ville Siltanen 2013; MIT License, see the file LICENSE
 
