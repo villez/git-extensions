@@ -25,10 +25,14 @@ pushes the current repo contents. Basic usage:
 This will create a bare remote repository remote-name.git in the remote
 machine. 
 
-Currently, the configuration of the remote host address and directory
-path, as well as any needed ssh options, are within the shell script itself.
-It'd be a more generally useful solution to make them configurable via
-the command line or a separate configuration file.
+You need to configure the remote server address and directory path,
+and can optionally also set ssh options. This happens via your normal
+.gitconfig file:
+
+    [mkremote]
+            serveraddr = my.server.address.com  # 192.168.1.100
+            serverdir = /git/repo/path/
+            sshopts = -l "myusername"
 
 
 ## Copyright & License
